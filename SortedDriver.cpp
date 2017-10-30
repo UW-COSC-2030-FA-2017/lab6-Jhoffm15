@@ -1,8 +1,7 @@
 // SortedDriver.cpp
 
-// tom bailey   1445  25 mar 2014
-// Construct sorted sequences and call functions that 
-//   process the sorted sequences.
+// James Hoffman
+//10/29/2017
 
 
 #include "RandomUtilities.h"
@@ -28,9 +27,9 @@ getNums(size_t listSize, double minNum, double maxNum)
 		theList.push_back(randReal(minNum, maxNum));
 	}
 
-	sort(begin(theList), end(theList));
+sort(begin(theList), end(theList));
 
-	return theList;
+return theList;
 }
 
 
@@ -56,15 +55,63 @@ getWords(size_t numWords, size_t wordLength, string alphabet)
 	return theWords;
 }
 
+//checks if negitive
+
+void checkNegitive(double &a) {
+	if (a < 0) {
+		a = a *(-1);
+	}
+}
 
 // pre:  number is not empty; 
 //       number is sorted from smallest to largest
 // post: The most isolated entry in number has been returned
-double
-mostIsolated(vector<double> & number)
+double mostIsolated(vector<double> &number)
 {
-	// STUB  STUB  STUB
-	return -123.456;
+	int mostIsolatedLocation(0);
+	double magnitude(0);
+	for (int i(0); i < number.size(); i++) {
+		if (i == 0) {
+			//checks first 
+			double tempH = number[i] - number[i + 1];
+			//makes pos
+			checkNegitive(tempH);
+			if (tempH > magnitude) {
+				magnitude = tempH;
+				mostIsolatedLocation = i;
+			}
+		}
+		else if (i == number.size() - 1) {
+			//checks last
+			double tempL = number[i] - number[i - 1];
+			//makes pos
+			checkNegitive(tempL);
+			if (tempL > magnitude) {
+				magnitude = tempL;
+				mostIsolatedLocation = i;
+			}
+		}
+		else {
+			//checks evreything in the middle
+			double tempL = number[i] - number[i - 1];
+			double tempH = number[i] - number[i + 1];
+			//makes pos
+			checkNegitive(tempL);
+			checkNegitive(tempH);
+			if (tempL < tempH) {
+				if (tempL > magnitude) {
+					magnitude = tempL;
+					mostIsolatedLocation = i;
+				}
+			}
+			else if (tempH > magnitude) {
+					magnitude = tempH;
+					mostIsolatedLocation = i;
+				}
+		}
+	}
+
+	return number[mostIsolatedLocation];
 }
 
 
@@ -74,8 +121,38 @@ mostIsolated(vector<double> & number)
 int
 unmatched(list<string> & A, list<string> & B)
 {
-	// STUB  STUB  STUB
-	return -1;
+	//setup
+	int check(0);
+	list<string>::iterator AList = A.begin();
+	list<string>::iterator BList = B.begin();
+	bool has = false;
+
+	//for each item in A list do things
+	for (AList; AList != A.end(); AList++) {
+		//reset has so it does not just regester true for all
+		has = false;
+		//make sure we do not run out of data
+		while (BList != B.end()){
+			//if they are equal set has to true and leave loop
+			if (*AList == *BList) {
+				has = true;
+				break;
+			}
+			//if B is greater get rid of front of B so we do not check it anymore
+			else if (*AList < *BList) {
+				B.pop_front();
+				break; 
+			}
+			//if B is less then A increment B
+			else if(*BList<*AList)
+			BList++;
+		}
+		//keeps check of how many things f2f
+		if (has == false) {
+			check++;
+		}
+	}
+	return check;
 }
 
 
